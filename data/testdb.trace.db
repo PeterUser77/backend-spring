@@ -1,0 +1,3 @@
+2024-02-13 08:57:37.859765-03:00 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Table "COURSE" not found (this database is empty); SQL statement:
+select c1_0.id,c1_0.category,c1_0.name from course c1_0 [42104-224]
