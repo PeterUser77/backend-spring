@@ -16,6 +16,8 @@ import com.backendspring.repository.CourseRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 
 @RestController
@@ -30,7 +32,6 @@ public class CourseController {
         return courseRepository.findAll();
     }
 
-    @SuppressWarnings("null")
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public Course create(
@@ -48,5 +49,19 @@ public class CourseController {
             .orElse(ResponseEntity.notFound().build());
     }
     
+    @PutMapping("/{id}")
+    public ResponseEntity<Course> putMethodName(
+        @PathVariable Long id, 
+        @RequestBody Course request
+    ) {
+        
+        return courseRepository.findById(id)
+            .map(recordFound -> {
+                recordFound.setName(request.getName());
+                recordFound.setCategory(request.getCategory());
+
+                return ResponseEntity.ok().body(courseRepository.save(recordFound));
+            }).orElse(ResponseEntity.notFound().build());
+    }
     
 }
