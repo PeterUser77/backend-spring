@@ -1,5 +1,7 @@
 package com.backendspring.model;
 
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.Where;
 import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -15,7 +17,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
-
+@SQLDelete(sql = "UPDATE COURSE C SET C.STATUS = 'inactive' WHERE C.ID = ?")
+@Where(clause = "STATUS = 'active'")
 @Data
 @Entity
 @Table(name = "COURSE")
@@ -47,5 +50,11 @@ public class Course {
         length = 10, 
         nullable = false)
     private String category;
+
+    @NotNull
+    @NotBlank
+    @Pattern(regexp = "active|inactive")
+    @Column(length = 10, nullable = false)
+    private String status = "active";
 
 }
