@@ -1,5 +1,7 @@
 package com.backendspring.model;
 
+import org.hibernate.validator.constraints.Length;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
@@ -8,6 +10,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 
 
@@ -18,14 +23,29 @@ public class Course {
     
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "ID")
+    @Column(
+        name = "ID")
     @JsonProperty("_id")
     private Long id;
 
-    @Column(name = "NAME")
+    @NotNull
+    @NotBlank
+    @Length(
+        min = 2,
+        max = 50)
+    @Column(
+        name = "NAME", 
+        length = 50, 
+        nullable = false)
     private String name;
 
-    @Column(name = "CATEGORY")
+    @NotNull
+    @NotBlank
+    @Pattern(regexp = "back-end|front-end")
+    @Column(
+        name = "CATEGORY", 
+        length = 10, 
+        nullable = false)
     private String category;
 
 }
