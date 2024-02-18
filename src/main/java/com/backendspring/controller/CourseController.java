@@ -3,7 +3,6 @@ package com.backendspring.controller;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.backendspring.model.Course;
+import com.backendspring.dto.CourseDTO;
 import com.backendspring.service.CourseService;
 
 import jakarta.validation.Valid;
@@ -39,22 +38,22 @@ public class CourseController {
 
 
     @GetMapping
-    public @ResponseBody List<Course> findAll() {
+    public @ResponseBody List<CourseDTO> findAll() {
         return courseService.findAll();
     }
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public Course create(
+    public CourseDTO create(
         @RequestBody
         @Valid
-        Course course
+        CourseDTO course
     ) {
         return this.courseService.create(course);
     }
 
     @GetMapping("/{id}")
-    public Course findById(
+    public CourseDTO findById(
         @PathVariable 
         @NotNull
         @Positive
@@ -64,14 +63,14 @@ public class CourseController {
     }
     
     @PutMapping("/{id}")
-    public Course update(
+    public CourseDTO update(
         @PathVariable 
         @NotNull
         @Positive
         Long id, 
         @RequestBody 
         @Valid
-        Course request
+        CourseDTO request
     ) {
         return this.courseService.update(id, request);
     }
