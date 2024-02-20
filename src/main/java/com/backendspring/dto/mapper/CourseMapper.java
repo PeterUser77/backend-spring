@@ -3,6 +3,7 @@ package com.backendspring.dto.mapper;
 import org.springframework.stereotype.Component;
 
 import com.backendspring.dto.CourseDTO;
+import com.backendspring.enums.Category;
 import com.backendspring.model.Course;
 
 @Component
@@ -17,7 +18,7 @@ public class CourseMapper {
         return new CourseDTO(
             course.getId(), 
             course.getName(), 
-            course.getCategory());
+            course.getCategory().getValue());
     }
 
     public Course toEntity(CourseDTO courseDTO) {
@@ -33,10 +34,20 @@ public class CourseMapper {
         }
 
         course.setName(courseDTO.name());
-        course.setCategory(courseDTO.category());
-        course.setStatus("active");
+        course.setCategory(convertCategoryValue(courseDTO.category()));
 
         return course;
+    }
+
+    public Category convertCategoryValue(String value) {
+        if (value == null) {
+            return null;
+        }
+        return switch(value) {
+            case "front-end" -> Category.FRONT_END;
+            case "back-end" -> Category.BACK_END;
+            default -> throw new IllegalArgumentException("Invalid category: " + value);
+        };
     }
 
 }

@@ -45,7 +45,7 @@ public class CourseService {
         return this.courseRepository.findById(id)
             .map(recordFound -> {
                 recordFound.setName(course.name());
-                recordFound.setCategory(course.category());
+                recordFound.setCategory(this.courseMapper.convertCategoryValue(course.category()));
                 
                 return this.courseMapper.toDTO(this.courseRepository.save(recordFound));
             }).orElseThrow(() -> new RecordNotFoundException(id));
@@ -53,8 +53,9 @@ public class CourseService {
 
     public void delete(Long id) {
         this.courseRepository.delete(
-            this.courseRepository.findById(id)
-                .orElseThrow(() -> new RecordNotFoundException(id))  
+            this.courseRepository
+            .findById(id)
+            .orElseThrow(() -> new RecordNotFoundException(id))  
         );
     }
 }
