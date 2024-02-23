@@ -9,6 +9,7 @@ import com.backendspring.dto.CourseDTO;
 import com.backendspring.dto.LessonDTO;
 import com.backendspring.enums.Category;
 import com.backendspring.model.Course;
+import com.backendspring.model.Lesson;
 
 @Component
 public class CourseMapper {
@@ -48,6 +49,17 @@ public class CourseMapper {
 
         course.setName(courseDTO.name());
         course.setCategory(convertCategoryValue(courseDTO.category()));
+
+        List<Lesson> lessons = courseDTO.lessons().stream().map(lessonDTO -> {
+            Lesson lesson = new Lesson();
+            lesson.setId(lessonDTO.id());
+            lesson.setName(lessonDTO.name());
+            lesson.setYoutubeUrl(lessonDTO.youtubeUrl());
+            lesson.setCourse(course);
+            return lesson;
+        }).collect(Collectors.toList());
+        
+        course.setLessons(lessons);
 
         return course;
     }
