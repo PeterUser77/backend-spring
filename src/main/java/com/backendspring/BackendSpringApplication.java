@@ -25,33 +25,31 @@ public class BackendSpringApplication {
         return args -> {
 			courseRepository.deleteAll();
 
-			Course c = new Course();
-			c.setName("Spring");
-			c.setCategory(Category.BACK_END);
+			for(int i = 0; i < 20; i++) {
 
-			List<Lesson> lessons = new ArrayList<>();
-			Lesson l1 = new Lesson();
-			l1.setName("Aula 01 curso spring");
-			l1.setYoutubeUrl("youtube.com");
-			l1.setCourse(c);
+				Course c = new Course();
+				c.setName("Spring");
+				c.setCategory(Category.BACK_END);
+				
+				List<Lesson> lessons = new ArrayList<>();
+				Lesson l1 = new Lesson();
+				l1.setName("Aula 01 curso spring");
+				l1.setYoutubeUrl("aulinha100");
+				l1.setCourse(c);
+				
+				Lesson l2 = new Lesson();
+				l2.setName("Aula 02 curso spring");
+				l2.setYoutubeUrl("aulinha200");
+				l2.setCourse(c);
+				
+				lessons.add(l1);
+				lessons.add(l2);
+				
+				c.setLessons(lessons);
+				
+				courseRepository.save(c);
+			}
 
-			Lesson l2 = new Lesson();
-			l2.setName("Aula 02 curso spring");
-			l2.setYoutubeUrl("youtube.com");
-			l2.setCourse(c);
-
-			Lesson l3 = new Lesson();
-			l3.setName("Aula 03 curso spring");
-			l3.setYoutubeUrl("youtube.com");
-			l3.setCourse(c);
-			
-			lessons.add(l1);
-			lessons.add(l2);
-			lessons.add(l3);
-
-			c.setLessons(lessons);
-
-			courseRepository.save(c);
 		};
     }
 
