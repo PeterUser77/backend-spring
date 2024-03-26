@@ -1,10 +1,10 @@
 package com.backendspring.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
+import org.hibernate.annotations.SQLRestriction;
 import org.hibernate.validator.constraints.Length;
 
 import com.backendspring.enums.Category;
@@ -28,7 +28,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 @SQLDelete(sql = "UPDATE COURSE C SET C.STATUS = 'inactive' WHERE C.ID = ?")
-@Where(clause = "STATUS = 'active'")
+@SQLRestriction("STATUS <> 'inactive'")
 @Entity
 @Table(name = "COURSE")
 public class Course {
@@ -74,24 +74,7 @@ public class Course {
         cascade = CascadeType.ALL,
         orphanRemoval = true,
         mappedBy = "course")
-    private List<Lesson> lessons = new ArrayList<>();
-
-    public Course() {
-    }
-
-    public Course(
-        Long id, 
-        @NotNull @NotBlank @Length(min = 2, max = 50) String name, 
-        @NotNull Category category,
-        @NotNull Status status, 
-        @NotBlank @NotNull @NotEmpty List<Lesson> lessons
-    ) {
-        this.id = id;
-        this.name = name;
-        this.category = category;
-        this.status = status;
-        this.lessons = lessons;
-    }
+    private Set<Lesson> lessons = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -125,14 +108,32 @@ public class Course {
         this.status = status;
     }
 
-    public List<Lesson> getLessons() {
+    public Set<Lesson> getLessons() {
         return lessons;
     }
 
-    public void setLessons(List<Lesson> lessons) {
-        this.lessons = lessons;
+    public void setLesson(Set<Lesson> lessons) {
+        if (lessons == null) {
+            throw new IllegalArgumentException("Lessons cannot be null.");
+        }
+        this.lessons.clear();
+        this.lessons.addAll(lessons);
     }
 
-    
+    public void addLesson(Lesson lesson) {
+        if (lesson == null) {
+            throw new IllegalArgumentException("Lesson cannot be null.");
+        }
+        lesson.setCourse(this);
+        this.lessons.add(lesson);
+    }
+
+    public void removeLesson(Lesson lesson) {
+        if (lesson == null) {
+            throw new IllegalArgumentException("Lesson cannot be null.");
+        }
+        lesson.setCourse(null);
+        this.lessons.remove(lesson);
+    }
 
 }

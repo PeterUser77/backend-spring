@@ -1,8 +1,8 @@
 package com.backendspring.controller;
 
-import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.lang.NonNull;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.backendspring.dto.CourseDTO;
 import com.backendspring.dto.CoursePageDTO;
+import com.backendspring.dto.CourseRequestDTO;
 import com.backendspring.service.CourseService;
 
 import jakarta.validation.Valid;
@@ -47,12 +48,10 @@ public class CourseController {
         int page,
         @RequestParam(defaultValue = "10")
         @Positive
-        @Max(10)
+        @Max(15)
         int element
     ) {
-        return courseService.findAll(
-            page,
-            element);
+        return courseService.findAll(page, element);
     }
 
     @PostMapping
@@ -61,15 +60,15 @@ public class CourseController {
         @RequestBody
         @Valid
         @NotNull
-        CourseDTO course
+        CourseRequestDTO courseRequestDTO
     ) {
-        return this.courseService.create(course);
+        return this.courseService.create(courseRequestDTO);
     }
 
     @GetMapping("/{id}")
     public CourseDTO findById(
         @PathVariable 
-        @NotNull
+        @NonNull
         @Positive
         Long id
     ) {
@@ -79,13 +78,13 @@ public class CourseController {
     @PutMapping("/{id}")
     public CourseDTO update(
         @PathVariable 
-        @NotNull
+        @NonNull
         @Positive
         Long id, 
         @RequestBody 
         @Valid
         @NotNull
-        CourseDTO request
+        CourseRequestDTO request
     ) {
         return this.courseService.update(id, request);
     }
@@ -94,7 +93,7 @@ public class CourseController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(
         @PathVariable 
-        @NotNull
+        @NonNull
         @Positive
         Long id
     ) {

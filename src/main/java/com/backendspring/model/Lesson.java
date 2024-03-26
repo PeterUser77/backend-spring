@@ -21,8 +21,8 @@ public class Lesson {
 
     @Id
     @Column(name = "ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
 
     @NotNull
     @NotBlank
@@ -56,28 +56,11 @@ public class Lesson {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private Course course;
 
-    public Lesson() {
-    }
-
-    public Lesson(
-        Long id, 
-        @NotNull @NotBlank String name, 
-        @NotNull @NotBlank String youtubeUrl, 
-        @NotNull Course course
-    ) {
-        this.id = id;
-        this.name = name;
-        this.youtubeUrl = youtubeUrl;
-        this.course = course;
-    }
-
-
-
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -106,55 +89,28 @@ public class Lesson {
     }
 
     @Override
-    public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((id == null) ? 0 : id.hashCode());
-        result = prime * result + ((name == null) ? 0 : name.hashCode());
-        result = prime * result + ((youtubeUrl == null) ? 0 : youtubeUrl.hashCode());
-        result = prime * result + ((course == null) ? 0 : course.hashCode());
-        return result;
-    }
-
-    @Override
     public boolean equals(Object obj) {
-        if (this == obj)
+        if (this == obj) {
             return true;
-        if (obj == null)
+        }
+        if (obj == null || getClass() != obj.getClass()) {
             return false;
-        if (getClass() != obj.getClass())
-            return false;
-        Lesson other = (Lesson) obj;
-        if (id == null) {
-            if (other.id != null)
-                return false;
-        } else if (!id.equals(other.id))
-            return false;
-        if (name == null) {
-            if (other.name != null)
-                return false;
-        } else if (!name.equals(other.name))
-            return false;
-        if (youtubeUrl == null) {
-            if (other.youtubeUrl != null)
-                return false;
-        } else if (!youtubeUrl.equals(other.youtubeUrl))
-            return false;
-        if (course == null) {
-            if (other.course != null)
-                return false;
-        } else if (!course.equals(other.course))
-            return false;
-        return true;
+        }
+        Lesson lesson = (Lesson) obj;
+        return id == lesson.id && name.equals(lesson.name) && youtubeUrl.equals(lesson.youtubeUrl);
     }
 
     @Override
     public String toString() {
-        return "Lesson [id=" + id + ", name=" + name + ", youtubeUrl=" + youtubeUrl + ", course=" + course + "]";
+        StringBuilder builder = new StringBuilder();
+        builder.append("Lesson [id=").append(id).append(", name=").append(name).append(", youtubeUrl=")
+                .append(youtubeUrl).append(", course=").append(course).append("]");
+        return builder.toString();
     }
 
-    
-    
-
+    @Override
+    public int hashCode() {
+        return 31 * id + name.hashCode() + youtubeUrl.hashCode();
+    }
 
 }
